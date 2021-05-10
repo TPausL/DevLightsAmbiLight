@@ -19,7 +19,10 @@ indexes = [index for index, value in enumerate(monitors)]
 api = Api()
 sct = mss()
 path = os.path.expanduser("~") + "/.ambidevlight/data.json"
-os.makedirs(os.path.dirname(path), exist_ok=True)
+if not os.path.exists(path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    open(path, "x")
+
 defaults = {"width": 16, "height": 9, "index": 0}
 try:
     with open(path, "r") as file:
@@ -51,6 +54,6 @@ print(start_message.format(mon.name, mon.width, mon.height, args.width, args.hei
 
 p = subprocess.Popen(
     [sys.executable, 'run.py', str(args.index), str(args.width), str(args.height)], stdout=subprocess.PIPE,
-    stderr=subprocess.STDOUT)
+    stderr=subprocess.STDOUT, )
 
 print("To stop it run 'kill {}'".format(p.pid))

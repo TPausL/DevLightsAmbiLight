@@ -1,7 +1,6 @@
 import sys
 import threading
 
-import simplejson as json
 from PIL import Image
 from mss import mss
 from screeninfo import get_monitors
@@ -18,7 +17,7 @@ def showMonOnStrip(mon, leds):
     img = Image.frombytes('RGB', sct_img.size, sct_img.bgra, "raw", "BGRX")
     imr = ImageReader(img, leds)
     colors = imr.getEdgeArray()
-    data = json.dumps({'data': [{'repeat': 1, 'leds': colors}]})
+    data = [{'repeat': 1, 'leds': colors}]
     api.sendCustom(data)
 
 
@@ -31,5 +30,5 @@ def loop(mon, leds):
 monitors = get_monitors()
 mon = monitors[int(sys.argv[1])]
 show_mon = {"left": mon.x, "top": mon.y, "width": mon.width, "height": mon.height}
-
+print("test")
 loop(show_mon, (int(sys.argv[2]), int(sys.argv[3])))
