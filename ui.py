@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 
+import psutil
 import simplejson as json
 import simplejson.errors
 from mss import mss
@@ -51,9 +52,15 @@ with open(path, "w") as file:
 start_message = "Starting ambilight on monitor '{}' ({}x{}) with {}x{} LEDs."
 mon = monitors[args.index]
 print(start_message.format(mon.name, mon.width, mon.height, args.width, args.height))
+proc_iter = psutil.process_iter(attrs=["pid", "name", "cmdline"])
+for p in proc_iter:
+    if "ambidevlight_bg_run.py" in p.cmdline():
+        print("Found old running instance. Killing it! (Multiple screens/lights are not supported at the time)")
+        p.kill()
 
 p = subprocess.Popen(
-    [sys.executable, 'run.py', str(args.index), str(args.width), str(args.height)], stdout=subprocess.PIPE,
-    stderr=subprocess.STDOUT, )
+    [sys.executable, 'ambidevlight_bg_run.py', str(args.index), str(args.width), str(args.height)],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.STDOUT)
 
 print("To stop it run 'kill {}'".format(p.pid))
