@@ -10,15 +10,14 @@ class ImageReader:
 
     def getEdgeArray(self):
         squares = []
-        for x in range(self.boxes[0]):
-            squares.append(self.rgbToHex(self.data[0, x]))
-        for y in range(self.boxes[1] - 1):
-            squares.append(self.rgbToHex(self.data[y + 1, self.boxes[0] - 1]))
-        for x in range(self.boxes[0] - 1, 0, -1):
-            squares.append(self.rgbToHex(self.data[self.boxes[1] - 1, x]))
-        for y in range(self.boxes[1] - 1, 1, -1):
-            squares.append(self.rgbToHex(self.data[y, 0]))
+        data = self.data
+        boxes = self.boxes
+        for x in range(boxes[0]):
+            squares.append(to_hex(data[0, x] / 255))
+        for y in range(boxes[1] - 1):
+            squares.append(to_hex(data[y + 1, boxes[0] - 1] / 255))
+        for x in range(boxes[0] - 1, 0, -1):
+            squares.append(to_hex(data[boxes[1] - 1, x] / 255))
+        for y in range(boxes[1] - 1, 1, -1):
+            squares.append(to_hex(data[y, 0] / 255))
         return squares
-
-    def rgbToHex(self, rgb):
-        return to_hex(rgb / 255)

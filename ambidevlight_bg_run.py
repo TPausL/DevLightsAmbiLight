@@ -1,5 +1,6 @@
 import sys
 import threading
+import time
 
 from PIL import Image
 from mss import mss
@@ -13,6 +14,7 @@ sct = mss()
 
 
 def showMonOnStrip(mon, leds):
+    print(time.time_ns() / 1000000)
     sct_img = sct.grab(mon)
     img = Image.frombytes('RGB', sct_img.size, sct_img.bgra, "raw", "BGRX")
     imr = ImageReader(img, leds)
@@ -30,5 +32,9 @@ def loop(mon, leds):
 monitors = get_monitors()
 mon = monitors[int(sys.argv[1])]
 show_mon = {"left": mon.x, "top": mon.y, "width": mon.width, "height": mon.height}
-print("test")
-loop(show_mon, (int(sys.argv[2]), int(sys.argv[3])))
+# showMonOnStrip(show_mon, (28, 15))
+
+# loop(show_mon, (int(sys.argv[2]), int(sys.argv[3])))
+for i in range(200):
+    showMonOnStrip(show_mon, (28, 15))
+    time.sleep(0.25)

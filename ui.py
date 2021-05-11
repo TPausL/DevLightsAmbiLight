@@ -57,10 +57,10 @@ for p in proc_iter:
     if "ambidevlight_bg_run.py" in p.cmdline():
         print("Found old running instance. Killing it! (Multiple screens/lights are not supported at the time)")
         p.kill()
-
+log = open("run.log", "w+")
 p = subprocess.Popen(
     [sys.executable, 'ambidevlight_bg_run.py', str(args.index), str(args.width), str(args.height)],
-    stdout=subprocess.PIPE,
+    stdout=log,
     stderr=subprocess.STDOUT)
 
 print("To stop it run 'kill {}'".format(p.pid))
